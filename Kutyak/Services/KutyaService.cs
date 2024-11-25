@@ -83,13 +83,29 @@ namespace Kutyak.Services
                 {
                     Kutya kutya = new Kutya { Id = id };
                     context.Kutyas.Remove(kutya);
-                    context.SaveChanges();
+                    //context.SaveChanges();
                     return "Sikeresen törölve lett a kutya adatai.";
                 }
                 catch (Exception ex)
                 {
                     return "Sikertelen volt a törlés";
                 }
+            }
+        }
+        public static Kutya GetKutya(int id)
+        {
+            using (
+                var context = new KutyakContext())
+            {
+                try
+                {
+                    return context.Kutyas.FirstOrDefault(f => f.Id == id);
+                }
+                catch
+                {
+                    return new Kutya { Id = 0 };
+                }
+
             }
         }
 

@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "KutyaKozmetika";
+}
+<h1 style="text-align:center">@ViewData["Title"]</h1>
+
+<h1>@((Model.Kutya as Kutya).Nev)</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <label id="id" hidden>@((ViewBag.Kutya as Kutya).Nev)</label>
+            <form onsubmit="KutyaTarol">
+                <div class="form-floating mb-3">
+                    <input class="form-control" 
+                    id="nev" 
+                    type="text" 
+                    value="@((ViewBag.Kutya as Kutya).Nev)" 
+                    required/>
+                    <label for="nev">A kutya neve</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input class="form-control" 
+                    id="eletkor" 
+                    type="number" 
+                    value="@((ViewBag.Kutya as Kutya).Eletkor)" 
+                    min ="0"
+                    max ="25"
+                    required />
+                    <label for="eletkor">A kutya életkora</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input class="form-control"
+                    id="chipNumber"
+                    type="number"
+                    value="@((ViewBag.Kutya as Kutya).ChipNumber)"
+                    required />
+                    <label for="chipNumber">A kutya chip száma</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select id="gazdaId" class="form-select">
+                        @foreach (Gazdum gazdak in ViewBag.Gazdak) {
+                            if((ViewBag.Kutya as Kutya).GazdaId == gazdak.Id){ 
+                                <option value="@gazdak.Id" selected>
+                                    @gazdak.Nev
+                                    </option>
+                            }else{
+                                <option value="@gazdak.Id">
+                                    @gazdak.Nev
+                                </option>
+                            }
+                        }
+                    </select>
+                    <label for="gazdaId">Gazda Neve</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select id="fajtaId" class="form-select">
+                        @foreach (Fajtum fajtak in ViewBag.Fajtak)
+                        {
+                            if ((ViewBag.Kutya as Kutya).FajtaId == fajtak.Id)
+                            {
+                                <option value="@fajtak.Id" selected>
+                                    @fajtak.Nev
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@fajtak.Id">
+                                    @fajtak.Nev
+                                </option>
+                            }
+                        }
+                    </select>
+                    <label for="gazdaId">Fajta Neve</label>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="card" style="width: 80%; margin:auto">
+                <img id="indexkep" class="card-img-top" src="@Program.ImageConvert((ViewBag.Kutya as Kutya).IndexKep)" title="Indexkép"/>
+                <div class="card-body">
+                    <p class="card-text text-center font-weight-bold">Indexkép</p>
+                </div>
+                <input id="indexKepGomb" type="file" onchange="indexKepBeallit()"/>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
