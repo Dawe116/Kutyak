@@ -7,5 +7,6 @@ namespace Kutyak.Controllers
     [ApiController]
     public class GazdaController : ControllerBase
     {
+        
     }
 }

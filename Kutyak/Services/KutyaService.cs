@@ -25,7 +25,7 @@ namespace Kutyak.Services
             }
         }
 
-        public static List<KutyakDTO> GetKutyakDTOs()
+        public static List<KutyakDTO> GetKutyakDTO()
         {
             using (var context = new KutyakContext())
             {
@@ -35,8 +35,9 @@ namespace Kutyak.Services
                     var response = context.Kutyas.Include(f => f.Gazda.IrszamNavigation).Include(f => f.Fajta).Select(f => new KutyakDTO()
                     {
                         Id = f.Id,
+                        Nev = f.Nev,
                         GazdaNev = f.Gazda.Nev,
-                        IrSzam = f.Gazda.Irszam,
+                        Irszam = f.Gazda.Irszam,
                         Telepules = f.Gazda.IrszamNavigation.Nev,
                         Lakcim = f.Gazda.Lakcim,
                         FajtaNev = f.Fajta.Nev,
@@ -55,14 +56,13 @@ namespace Kutyak.Services
             }
         }
 
-        public static KutyaGumiDTO GetKutyaGumi(int id)
+        public static KutyaGumi GetKutyaGumi(int id)
         {
             using (var context = new KutyakContext())
             {
-
                 try
                 {
-                    var response = context.Kutyas.Where(f => f.Id == id).Select(f => new KutyaGumiDTO()
+                    var response = context.Kutyas.Where(f => f.Id == id).Select(f => new KutyaGumi()
                     {
                         Kep = f.Kep
                     }).ToList();
@@ -74,41 +74,38 @@ namespace Kutyak.Services
                 }
             }
         }
+
         public static string KutyaTorol(int id)
         {
             using (var context = new KutyakContext())
             {
-
                 try
                 {
                     Kutya kutya = new Kutya { Id = id };
                     context.Kutyas.Remove(kutya);
                     //context.SaveChanges();
-                    return "Sikeresen törölve lett a kutya adatai.";
+                    return "Sikeresen törölve a kutya adata.";
                 }
                 catch (Exception ex)
                 {
-                    return "Sikertelen volt a törlés";
+                    return ex.Message;
                 }
             }
         }
+
         public static Kutya GetKutya(int id)
         {
-            using (
-                var context = new KutyakContext())
+            using (var context = new KutyakContext())
             {
                 try
                 {
-                    return context.Kutyas.FirstOrDefault(f => f.Id == id);
+                    return context.Kutyas.FirstOrDefault(f=>f.Id==id);
                 }
                 catch
                 {
-                    return new Kutya { Id = 0 };
+                    return new Kutya {Id=0};
                 }
-
             }
         }
-
-
     }
 }

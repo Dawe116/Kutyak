@@ -6,8 +6,7 @@ namespace Kutyak.Services
     {
         public static List<Fajtum> GetFajtak()
         {
-            using (
-                var context = new KutyakContext())
+            using (var context = new KutyakContext())
             {
                 try
                 {
@@ -17,7 +16,6 @@ namespace Kutyak.Services
                 {
                     return new List<Fajtum>();
                 }
-
             }
         }
     }

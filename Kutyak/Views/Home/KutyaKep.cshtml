@@ -1,14 +1,16 @@
-﻿@using Kutyak.DTOs
+﻿@using Kutyak.DTOs;
 @{
-    ViewData["Title"] = "Kicsi kutyi pofija";
+    ViewData["Title"] = "Kicsi kutyi pofilya";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Ez a kutya képe</p>
-@if(Model!= null ){
-    <img class="img-fluid img-thumbnail" src="@Program.ImageConvert((Model as KutyaGumiDTO).Kep)"/>
+<p>Ez a kutyi képe</p>
+
+@if (Model != null)
+{
+    <img class="img-fluid img-thumbnail" src="@Program.ImageConvert((Model as KutyaGumi).Kep)"/>
 }
 else
 {
-    <img style="margin-left: auto; margin-right:auto; display:block" src="~/img/@Program.HibaNevGenerator()" width="300px"/>
+    <img style="margin-left:auto;margin-right:auto;display:block" src="~/img/@Program.HibaNevGenerator()" width="300px" />
 }

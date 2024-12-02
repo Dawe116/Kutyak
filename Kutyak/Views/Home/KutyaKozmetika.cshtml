@@ -1,104 +1,206 @@
-﻿@{
-    ViewData["Title"] = "KutyaKozmetika";
+﻿<script type="text/javascript">
+
+    let indexKep = "";
+    let kep = "";
+
+    function indexKepBeallit() {
+        let preview = document.getElementById("indexKep");
+        let file = document.getElementById("indexKepGomb").files[0];
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            indexKep = file;
+        }
+        reader.readAsDataURL(file);
+    }
+
+    function kepBeallit() {
+        let preview = document.getElementById("kep");
+        let file = document.getElementById("kepGomb").files[0];
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            kep = file;
+        }
+        reader.readAsDataURL(file);
+    }
+
+    async function image2file(name) {
+        const img = document.getElementById(name);
+        const canvas = document.getElementById(name + "Canvas");
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(function (blob) {
+            if (blob) {
+                const file = new File([blob], name + ".jpg", {
+                    type: "image/jpeg",
+                    lastModified: Date.now(),
+                });
+                if (name == "kep") {
+                    kep = file;
+                }
+                else {
+                    indexKep = file;
+                }
+            } else {
+                console.error("A canvas tartalmának Blob-ba konvertálása sikertelen.");
+            }
+        }, "image/jpg");
+    }
+
+    function kutyaTarol() {
+        if (kep == "" || indexKep == "") {
+            alert("Az indexkép és kép kiválasztása kötelező!");
+        }
+        else {
+            let body= {
+                "Id": parseInt(document.getElementById("id").textContent),
+                "GazdaId": parseInt(document.getElementById("gazdaId").value),
+                "FajtaId": parseInt(document.getElementById("fajtaId").value),
+                "Eletkor": parseInt(document.getElementById("eletkor").value),
+                "ChipNumber": document.getElementById("chipNumber").value,
+                "Nev": document.getElementById("nev").value,
+            }
+            let url = "https://localhost:7066/api/kutya";
+            var formData = new FormData();
+            formData.append("Json", JSON.stringify(body));
+            formData.append("indexKep", indexKep);
+            formData.append("kep", kep);
+            if (body.Id != 0) {
+                axios.put(url, formData).then((response) => {
+                    alert(response.data);
+                    window.location.replace("../KutyakDTO");
+                }).catch((error) => {
+                    alert(error);
+                    window.location.replace("../KutyakDTO");
+                });
+            }
+            else {
+                axios.post(url, formData).then((response) => {
+                    alert(response.data);
+                    window.location.replace("../KutyakDTO");
+                }).catch((error) => {
+                    alert(error);
+                    window.location.replace("../KutyakDTO");
+                });
+            }
+        }
+    }
+
+    window.addEventListener('load', function () {
+        image2file("indexKep");
+        image2file("kep");
+        console.log(indexKep);
+        console.log(kep);
+    });
+
+</script>
+
+@{
+    ViewData["Title"] = "Kutya kozmetika";
 }
 <h1 style="text-align:center">@ViewData["Title"]</h1>
 
-<h1>@((Model.Kutya as Kutya).Nev)</h1>
-
 <div class="container">
-    <div class="row">
-        <div class="col-md-4 col-sm-12">
-            <label id="id" hidden>@((ViewBag.Kutya as Kutya).Nev)</label>
-            <form onsubmit="KutyaTarol">
+    <form onsubmit="kutyaTarol()">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <label id="id" hidden>@((ViewBag.Kutya as Kutya).Id)</label>
                 <div class="form-floating mb-3">
-                    <input class="form-control" 
-                    id="nev" 
-                    type="text" 
-                    value="@((ViewBag.Kutya as Kutya).Nev)" 
-                    required/>
-                    <label for="nev">A kutya neve</label>
+                    <input id="nev"
+                           type="text"
+                           class="form-control rounded-3"
+                           value="@((ViewBag.Kutya as Kutya).Nev)"
+                           required />
+                    <label for="nev">Kutya neve</label>
                 </div>
-
                 <div class="form-floating mb-3">
-                    <input class="form-control" 
-                    id="eletkor" 
-                    type="number" 
-                    value="@((ViewBag.Kutya as Kutya).Eletkor)" 
-                    min ="0"
-                    max ="25"
-                    required />
-                    <label for="eletkor">A kutya életkora</label>
+                    <input id="eletkor"
+                           type="number"
+                           class="form-control rounded-3"
+                           value="@((ViewBag.Kutya as Kutya).Eletkor)"
+                           min="0"
+                           max="25"
+                           required />
+                    <label for="eletkor">Életkor</label>
                 </div>
-
                 <div class="form-floating mb-3">
-                    <input class="form-control"
-                    id="chipNumber"
-                    type="number"
-                    value="@((ViewBag.Kutya as Kutya).ChipNumber)"
-                    required />
-                    <label for="chipNumber">A kutya chip száma</label>
+                    <input id="chipNumber"
+                           type="text"
+                           class="form-control rounded-3"
+                           value="@((ViewBag.Kutya as Kutya).ChipNumber)"
+                           required />
+                    <label for="chipNumber">Chip száma</label>
                 </div>
-
                 <div class="form-floating mb-3">
                     <select id="gazdaId" class="form-select">
-                        @foreach (Gazdum gazdak in ViewBag.Gazdak) {
-                            if((ViewBag.Kutya as Kutya).GazdaId == gazdak.Id){ 
-                                <option value="@gazdak.Id" selected>
-                                    @gazdak.Nev
-                                    </option>
-                            }else{
-                                <option value="@gazdak.Id">
-                                    @gazdak.Nev
-                                </option>
-                            }
-                        }
-                    </select>
-                    <label for="gazdaId">Gazda Neve</label>
-                </div>
-
-                <div class="form-floating mb-3">
-                    <select id="fajtaId" class="form-select">
-                        @foreach (Fajtum fajtak in ViewBag.Fajtak)
+                        @foreach (Gazdum gazda in ViewBag.Gazdak)
                         {
-                            if ((ViewBag.Kutya as Kutya).FajtaId == fajtak.Id)
+                            if ((ViewBag.Kutya as Kutya).GazdaId == gazda.Id)
                             {
-                                <option value="@fajtak.Id" selected>
-                                    @fajtak.Nev
+                                <option value="@gazda.Id" selected>
+                                    @gazda.Nev
                                 </option>
                             }
                             else
                             {
-                                <option value="@fajtak.Id">
-                                    @fajtak.Nev
+                                <option value="@gazda.Id">
+                                    @gazda.Nev
                                 </option>
                             }
                         }
                     </select>
-                    <label for="gazdaId">Fajta Neve</label>
+                    <label for="gazdaId">Gazda neve</label>
                 </div>
-            </form>
-        </div>
-        <div class="col-md-4 col-sm-12">
-            <div class="card" style="width: 80%; margin:auto">
-                <img id="indexkep" class="card-img-top" src="@Program.ImageConvert((ViewBag.Kutya as Kutya).IndexKep)" title="Indexkép"/>
-                <div class="card-body">
-                    <p class="card-text text-center font-weight-bold">Indexkép</p>
+                <div class="form-floating mb-3">
+                    <select id="fajtaId" class="form-select">
+                        @foreach (Fajtum fajta in ViewBag.Fajtak)
+                        {
+                            if ((ViewBag.Kutya as Kutya).FajtaId == fajta.Id)
+                            {
+                                <option value="@fajta.Id" selected>
+                                    @fajta.Nev
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@fajta.Id">
+                                    @fajta.Nev
+                                </option>
+                            }
+                        }
+                    </select>
+                    <label for="fajtaId">Fajta</label>
                 </div>
-                <input id="indexKepGomb" type="file" onchange="indexKepBeallit()"/>
-            </div>
 
+            </div>
             <div class="col-md-4 col-sm-12">
-                <div class="card" style="width: 80%; margin:auto">
+                <div class="card" style="width: 80%;margin:auto">
+                    <img id="indexKep" class="card-img-top" src="@Program.ImageConvert((ViewBag.Kutya as Kutya).IndexKep)" title="Indexkép" />
+                    <canvas id="indexKepCanvas" style="display:none;"></canvas>
+                    <div class="card-body">
+                        <p class="card-text text-center font-weight-bold">Indexkép</p>
+                        <input id="indexKepGomb" type="file" onchange="indexKepBeallit()" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="card" style="width: 80%;margin:auto">
                     <img id="kep" class="card-img-top" src="@Program.ImageConvert((ViewBag.Kutya as Kutya).Kep)" title="Kép" />
+                    <canvas id="kepCanvas" style="display:none;"></canvas>
                     <div class="card-body">
                         <p class="card-text text-center font-weight-bold">Kép</p>
+                        <input id="kepGomb" type="file" onchange="kepBeallit()" />
                     </div>
-                    <input id="KepGomb" type="file" onchange="KepBeallit()" />
                 </div>
+            </div>
+            <button id="mentesGomb" class="w-100 mb-2 btn btn-primary btn-lg rounded-3">
+                Adatok mentése
+            </button>
         </div>
-
-
-    </div>
+    </form>
 </div>
 
 

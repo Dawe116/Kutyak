@@ -9,7 +9,7 @@ namespace Kutyak
 
         public static string HibaNevGenerator()
         {
-            return "Error-404" + new Random().Next(1, 4) + "jpg";
+            return "Error-404-"+new Random().Next(1,4)+".jpg";
         }
         public static void Main(string[] args)
         {
