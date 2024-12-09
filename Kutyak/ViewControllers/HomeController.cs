@@ -76,8 +76,9 @@ namespace Kutyak.Controllers
         {
             await Task.Delay(500);
             Fajtum fajta = FajtaService.GetFajta(id);
+            
 
-                ViewBag.Kutya = fajta;
+                ViewBag.Fajta = fajta;
 
             ViewBag.Fajtak = FajtaService.GetFajtak();
             return View(ViewBag);

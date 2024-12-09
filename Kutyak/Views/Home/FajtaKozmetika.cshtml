@@ -9,7 +9,7 @@
                 "Leiras": parseInt(document.getElementById("Leiras").value),
 
             }
-            let url = "https://localhost:7066/api/kutya";
+            let url = "https://localhost:7066/api/fajta";
             var formData = new FormData();
             formData.append("Json", JSON.stringify(body));
             if (body.Id != 0) {
@@ -40,12 +40,15 @@
     ViewData["Title"] = "Fajta Kozmetika";
 }
 <h1 style="text-align:center">@ViewData["Title"]</h1>
+<h1>@(ViewBag.Fajta as Fajtum).Nev</h1>
 
 <div class="container">
     <form onsubmit="fajtaTarol()">
         <div class="row">
             <div class="col-md-4 col-sm-12">
                 <label id="id" hidden>@((ViewBag.Fajta as Fajtum).Id)</label>
+
+
                 <div class="form-floating mb-3">
                     <input id="nev"
                            type="text"
@@ -55,6 +58,14 @@
                     <label for="nev">Fajta neve</label>
                 </div>
                 
+                    <div class="form-floating mb-3">
+                        <input id="nev"
+                               type="text"
+                               class="form-control rounded-3"
+                               value="@((ViewBag.Fajta as Fajtum).Leiras)"
+                               required />
+                        <label for="leiras">Fajta Leírása</label>
+                    </div>
 
             </div>
           
