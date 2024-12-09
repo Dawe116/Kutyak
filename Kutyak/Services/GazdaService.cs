@@ -11,7 +11,7 @@ namespace Kutyak.Services
             {
                 try
                 {
-                    return context.Gazda.ToList();
+                    return context.Gazdas.ToList();
                 }
                 catch
                 {

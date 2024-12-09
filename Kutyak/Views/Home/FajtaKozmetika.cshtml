@@ -1,0 +1,68 @@
+﻿<script type="text/javascript">
+
+
+    function fajtaTarol() {
+
+            let body= {
+                "Id": parseInt(document.getElementById("id").textContent),
+                "Nev": parseInt(document.getElementById("Nev").value),
+                "Leiras": parseInt(document.getElementById("Leiras").value),
+
+            }
+            let url = "https://localhost:7066/api/kutya";
+            var formData = new FormData();
+            formData.append("Json", JSON.stringify(body));
+            if (body.Id != 0) {
+                axios.put(url, formData).then((response) => {
+                    alert(response.data);
+                    window.location.replace("../FajtaDTO");
+                }).catch((error) => {
+                    alert(error);
+                    window.location.replace("../FajtaDTO");
+                });
+            }
+            else {
+                axios.post(url, formData).then((response) => {
+                    alert(response.data);
+                    window.location.replace("../FajtaDTO");
+                }).catch((error) => {
+                    alert(error);
+                    window.location.replace("../FajtaDTO");
+                });
+            }
+        
+    }
+
+
+</script>
+
+@{
+    ViewData["Title"] = "Fajta Kozmetika";
+}
+<h1 style="text-align:center">@ViewData["Title"]</h1>
+
+<div class="container">
+    <form onsubmit="fajtaTarol()">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <label id="id" hidden>@((ViewBag.Fajta as Fajtum).Id)</label>
+                <div class="form-floating mb-3">
+                    <input id="nev"
+                           type="text"
+                           class="form-control rounded-3"
+                           value="@((ViewBag.Fajta as Fajtum).Nev)"
+                           required />
+                    <label for="nev">Fajta neve</label>
+                </div>
+                
+
+            </div>
+          
+            <button id="mentesGomb" class="w-100 mb-2 btn btn-primary btn-lg rounded-3">
+                Adatok mentése
+            </button>
+        </div>
+    </form>
+</div>
+
+

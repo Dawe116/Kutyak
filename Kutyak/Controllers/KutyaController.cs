@@ -27,7 +27,7 @@ namespace Kutyak.Controllers
                 {
                     Kutya kutya = new Kutya { Id = id };
                     context.Kutyas.Remove(kutya);
-                    context.SaveChanges();
+                    //context.SaveChanges();
                     return StatusCode(StatusCodes.Status200OK, "Kutya kitörölve.");
                 }
                 catch (Exception ex)

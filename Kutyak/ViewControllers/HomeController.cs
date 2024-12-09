@@ -34,6 +34,16 @@ namespace Kutyak.Controllers
             return View(KutyaService.GetKutyakDTO());
         }
 
+        public IActionResult Fajtak()
+        {
+            return View(FajtaService.GetFajtak());
+        }
+
+        public IActionResult FajtakDTO()
+        {
+            return View(FajtaService.GetFajtaDTOs());
+        }
+
         public IActionResult KutyaKep(int id)
         {
             return View(KutyaService.GetKutyaGumi(id));
@@ -62,7 +72,19 @@ namespace Kutyak.Controllers
             return View(ViewBag);
         }
 
+        public async Task<IActionResult> FajtaKozmetika(int id)
+        {
+            await Task.Delay(500);
+            Fajtum fajta = FajtaService.GetFajta(id);
+
+                ViewBag.Kutya = fajta;
+
+            ViewBag.Fajtak = FajtaService.GetFajtak();
+            return View(ViewBag);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

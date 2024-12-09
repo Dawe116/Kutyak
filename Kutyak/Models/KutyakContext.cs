@@ -15,9 +15,9 @@ public partial class KutyakContext : DbContext
     {
     }
 
-    public virtual DbSet<Fajtum> Fajta { get; set; }
+    public virtual DbSet<Fajtum> Fajtas { get; set; }
 
-    public virtual DbSet<Gazdum> Gazda { get; set; }
+    public virtual DbSet<Gazdum> Gazdas { get; set; }
 
     public virtual DbSet<Kutya> Kutyas { get; set; }
 

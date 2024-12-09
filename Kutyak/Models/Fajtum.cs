@@ -14,4 +14,5 @@ public partial class Fajtum
 
     [JsonIgnore]
     public virtual ICollection<Kutya> Kutyas { get; set; } = new List<Kutya>();
+    public virtual ICollection<Gazdum> Gazdas { get; set; } = new List<Gazdum>();
 }
